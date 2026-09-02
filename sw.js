@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tic-tac-toe-two-v1';
+const CACHE_NAME = 'tic-tac-toe-two-randomstarter-autoscale-v3';
 const APP_SHELL = [
   './',
   './index.html',

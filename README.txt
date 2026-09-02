@@ -1,4 +1,4 @@
-Tic Tac Toe Two – PWA für iPhone 17 Pr
+Tic Tac Toe Two – PWA für iPhone 17 Pro
 
 Diese Version ist für HTTPS-Hosting vorgesehen.
 
