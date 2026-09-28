@@ -1774,9 +1774,9 @@ button, .cell {
     { id: 4, name: 'Schwer', short: 'Voraus' },
     { id: 5, name: 'Meister', short: 'Analyse' }
   ];
-  const BONUS_START_MOVE = 5;
+  const BONUS_START_MOVE = 10;
   const BONUS_CHANCE = 0.15;
-  const BONUS_COOLDOWN_MOVES = 2;
+  const BONUS_COOLDOWN_MOVES = 4;
   const BONUS_CARDS = [
     { id:'delete1', title:'Lösche 1', icon:'−1', type:'delete', amount:1, text:'Entferne ein beliebiges belegtes Feld.' },
     { id:'delete2', title:'Lösche 2', icon:'−2', type:'delete', amount:2, text:'Entferne bis zu zwei beliebige belegte Felder.' },
@@ -1933,7 +1933,7 @@ button, .cell {
       cols: chosen.cols, rows: chosen.rows, sizeId: chosen.id,
       board: Array(chosen.cols * chosen.rows).fill(null), current: starter, starter, scores: {X:0,O:0},
       scored: new Set(), totalTriplets: 0, move: 0, ended: false, turnStartedAt: Date.now(),
-      bonusCooldown: 0, bonusCount: 0, doubleTriplet: { X:false, O:false }
+      bonusCooldown: 0, bonusCount: 0, bonusWins: { X:0, O:0 }, doubleTriplet: { X:false, O:false }
     };
     bonusFlow = null;
 
@@ -2218,7 +2218,7 @@ button, .cell {
     const p = document.createElement('p'); p.className='feed-item';
     const origin = source === 'bonus' ? ' · Bonus' : '';
     const pointText = points !== count ? ` · ${points} Punkte` : '';
-    p.innerHTML = `<b>${player}</b> erzielt ${count === 1 ? '1 neues Triplet' : `${count} neue Triplets`}${pointText}${origin} · Runde ${game.move}`;
+    p.innerHTML = `<b>${player}</b> erzielt ${count === 1 ? '1 neues Triplet' : `${count} neue Triplets`}${pointText}${origin} · Runde ${Math.ceil(game.move / 2)}`;
     els.tripletFeed.prepend(p);
     while (els.tripletFeed.children.length > 8) els.tripletFeed.lastChild.remove();
   }
@@ -2485,11 +2485,16 @@ button, .cell {
   function maybeStartBonusRound(nextPlayer) {
     if (!game || game.ended || bonusFlow) return false;
 
+    // Lucky Break wird nur nach einer vollständig gespielten Runde geprüft.
+    // Eine Runde besteht aus zwei normalen Zügen.
+    if (game.move % 2 !== 0) return false;
+
     if (game.bonusCooldown > 0) {
-      game.bonusCooldown--;
+      game.bonusCooldown = Math.max(0, game.bonusCooldown - 2);
       return false;
     }
 
+    // Frühestens nach Runde 5 = 10 normale Züge.
     if (game.move < BONUS_START_MOVE || Math.random() >= BONUS_CHANCE) return false;
 
     startBonusRound(nextPlayer);
@@ -2524,7 +2529,17 @@ button, .cell {
     if (!els.bonusDialog.open) els.bonusDialog.showModal();
     sound('coin');
 
-    const selectedPlayer = Math.random() < .5 ? 'X' : 'O';
+    const xWins = game.bonusWins?.X || 0;
+    const oWins = game.bonusWins?.O || 0;
+    let selectedPlayer;
+
+    // 50:50-Ausgleich:
+    // Bei Gleichstand entscheidet die Münze zufällig.
+    // Sonst bekommt der Spieler mit weniger bisherigen Bonus-Runden den Zuschlag.
+    if (xWins === oWins) selectedPlayer = Math.random() < .5 ? 'X' : 'O';
+    else selectedPlayer = xWins < oWins ? 'X' : 'O';
+
+    game.bonusWins[selectedPlayer]++;
     bonusFlow.player = selectedPlayer;
 
     setTimeout(() => {

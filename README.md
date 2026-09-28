@@ -15,11 +15,11 @@ PWA-Version für iPhone/Safari und GitHub Pages.
 Bei jeder Partie wird X oder O zufällig als Startspieler bestimmt.
 
 ### Bonus-Runden
-- Ab dem **5. normalen Zug** wird nach jedem regulären Zug geprüft, ob eine Bonus-Runde startet.
+- Ab der **vollständig gespielten Runde 5** wird einmal pro kompletter Runde geprüft, ob eine Bonus-Runde startet.
 - Wahrscheinlichkeit: **15 %**.
-- Nach einer Bonus-Runde folgen **mindestens zwei normale Züge ohne Bonus-Runde**.
+- Nach einer Bonus-Runde folgen **mindestens zwei vollständige normale Runden ohne Bonus-Runde**.
 - Danach kann wieder zufällig eine Bonus-Runde erscheinen.
-- Eine Münze wählt zufällig Spieler X oder O.
+- Die Münzwahl ist über die Partie 50:50 ausbalanciert: Bei Gleichstand wird zufällig gewählt, sonst erhält der Spieler mit weniger bisherigen Bonus-Runden den nächsten Zuschlag.
 - Der gewählte Spieler zieht anschließend eine von **12 Karten**.
 - Gegen die KI zieht und spielt Computer O seine Bonuskarte automatisch.
 
