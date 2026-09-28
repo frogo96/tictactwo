@@ -1318,6 +1318,273 @@ button, .cell {
   }
 }
 
+
+/* ===== KI-Schwierigkeit + Bonus-Runden ===== */
+.ai-difficulty {
+  margin-top: 14px;
+}
+.ai-difficulty.hidden {
+  display: none;
+}
+.difficulty-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6px;
+}
+.difficulty-btn {
+  min-height: 48px;
+  border: 1px solid rgba(241,213,143,.20);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255,255,255,.035), rgba(0,0,0,.16));
+  color: var(--text);
+  padding: 7px 5px;
+  font: inherit;
+  cursor: pointer;
+  transition: transform .16s ease, border-color .16s ease, background .16s ease, box-shadow .16s ease;
+}
+.difficulty-btn strong {
+  display: block;
+  font-size: 14px;
+  line-height: 1;
+}
+.difficulty-btn span {
+  display: block;
+  margin-top: 4px;
+  font-size: 8px;
+  opacity: .70;
+  letter-spacing: .04em;
+}
+.difficulty-btn.active {
+  border-color: rgba(241,213,143,.82);
+  background: linear-gradient(180deg, rgba(241,213,143,.16), rgba(241,213,143,.055));
+  box-shadow: inset 0 0 18px rgba(241,213,143,.06), 0 0 18px rgba(241,213,143,.06);
+}
+.difficulty-btn:active {
+  transform: scale(.97);
+}
+
+.bonus-modal {
+  width: min(92vw, 520px);
+  text-align: center;
+  overflow: visible;
+}
+.bonus-modal::backdrop {
+  background: rgba(2,5,4,.80);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+}
+.bonus-stage {
+  display: grid;
+  place-items: center;
+  gap: 16px;
+  padding: 8px 0 2px;
+}
+.bonus-title {
+  margin: 0;
+  font-size: clamp(27px, 8vw, 42px);
+}
+.bonus-subtitle {
+  min-height: 38px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.35;
+}
+.bonus-coin {
+  --coin-color: #f1d58f;
+  width: 96px;
+  height: 96px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 3px solid rgba(255,244,190,.85);
+  background:
+    radial-gradient(circle at 35% 28%, #fff5c9 0 4%, transparent 5%),
+    radial-gradient(circle at 35% 30%, #dab961 0%, #9a762d 48%, #5b4018 100%);
+  color: #10130f;
+  font: 1000 40px/1 system-ui, sans-serif;
+  text-shadow: 0 1px rgba(255,255,255,.45);
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.42),
+    0 0 34px rgba(241,213,143,.20),
+    inset 0 0 0 5px rgba(255,255,255,.13);
+  transform-style: preserve-3d;
+}
+.bonus-coin.flipping {
+  animation: bonusCoinFlip 1.05s cubic-bezier(.16,.72,.18,1) both;
+}
+.bonus-coin.player-x {
+  --coin-color: #f15b57;
+  box-shadow: 0 10px 30px rgba(0,0,0,.42), 0 0 44px rgba(241,91,87,.34), inset 0 0 0 5px rgba(255,255,255,.13);
+}
+.bonus-coin.player-o {
+  --coin-color: #71d7d3;
+  box-shadow: 0 10px 30px rgba(0,0,0,.42), 0 0 44px rgba(113,215,211,.34), inset 0 0 0 5px rgba(255,255,255,.13);
+}
+@keyframes bonusCoinFlip {
+  0%   { transform: translateY(0) rotateY(0) rotateX(0) scale(1); }
+  24%  { transform: translateY(-26px) rotateY(360deg) rotateX(90deg) scale(1.08); }
+  58%  { transform: translateY(-10px) rotateY(900deg) rotateX(180deg) scale(.96); }
+  100% { transform: translateY(0) rotateY(1440deg) rotateX(360deg) scale(1); }
+}
+
+.bonus-card {
+  width: min(74vw, 260px);
+  min-height: 178px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  border: 1px solid rgba(241,213,143,.50);
+  border-radius: 20px;
+  background:
+    linear-gradient(145deg, rgba(241,213,143,.09), transparent 38%),
+    repeating-linear-gradient(45deg, rgba(241,213,143,.045) 0 2px, transparent 2px 9px),
+    #0d1712;
+  color: var(--text);
+  box-shadow: 0 18px 45px rgba(0,0,0,.38), inset 0 0 34px rgba(241,213,143,.045);
+  cursor: pointer;
+  perspective: 800px;
+  transition: transform .18s ease, border-color .18s ease;
+}
+.bonus-card:disabled {
+  cursor: default;
+  opacity: .58;
+}
+.bonus-card:not(:disabled):active {
+  transform: scale(.97);
+}
+.bonus-card .card-back {
+  display: grid;
+  gap: 7px;
+  place-items: center;
+}
+.bonus-card .card-back b {
+  font-size: 34px;
+  color: var(--brass-2);
+}
+.bonus-card .card-back span {
+  font-size: 10px;
+  letter-spacing: .16em;
+}
+.bonus-card.revealed {
+  animation: cardReveal .68s cubic-bezier(.16,.78,.18,1) both;
+  border-color: rgba(255,241,184,.86);
+}
+@keyframes cardReveal {
+  0% { transform: rotateY(0) scale(.94); filter: brightness(.8); }
+  45% { transform: rotateY(90deg) scale(1.04); filter: brightness(1.4); }
+  100% { transform: rotateY(0) scale(1); filter: brightness(1); }
+}
+.card-face {
+  display: grid;
+  gap: 9px;
+}
+.card-face .card-icon {
+  font-size: 36px;
+  line-height: 1;
+}
+.card-face strong {
+  font-size: 20px;
+  color: var(--brass-2);
+}
+.card-face span {
+  max-width: 230px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+.bonus-player-pill {
+  min-height: 26px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(241,213,143,.24);
+  background: rgba(255,255,255,.025);
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.bonus-player-pill.player-x { color: #f15b57; border-color: rgba(241,91,87,.38); }
+.bonus-player-pill.player-o { color: #71d7d3; border-color: rgba(113,215,211,.38); }
+
+.board.bonus-select .cell {
+  opacity: .48;
+  filter: saturate(.65) brightness(.72);
+}
+.board.bonus-select .cell.bonus-target {
+  opacity: 1;
+  filter: brightness(1.15) saturate(1.15);
+  cursor: pointer;
+  border-color: rgba(255,239,174,.72);
+  box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 0 24px rgba(241,213,143,.17), inset 0 0 20px rgba(241,213,143,.06);
+  animation: bonusTargetPulse 1.15s ease-in-out infinite alternate;
+}
+.board.bonus-select .cell.bonus-target.player-x {
+  border-color: rgba(241,91,87,.72);
+  box-shadow: 0 0 24px rgba(241,91,87,.20), inset 0 0 20px rgba(241,91,87,.07);
+}
+.board.bonus-select .cell.bonus-target.player-o {
+  border-color: rgba(113,215,211,.72);
+  box-shadow: 0 0 24px rgba(113,215,211,.20), inset 0 0 20px rgba(113,215,211,.07);
+}
+@keyframes bonusTargetPulse {
+  from { transform: scale(.99); }
+  to { transform: scale(1.025); }
+}
+.cell.bonus-pop {
+  animation: bonusCellPop .62s cubic-bezier(.14,.82,.2,1) both;
+}
+@keyframes bonusCellPop {
+  0% { transform: scale(.78); filter: brightness(1); }
+  28% { transform: scale(1.11); filter: brightness(1.55); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+.bonus-banner {
+  position: absolute;
+  z-index: 12;
+  left: 50%;
+  top: 8px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  padding: 8px 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(241,213,143,.46);
+  background: rgba(6,12,9,.88);
+  color: var(--brass-2);
+  font: 800 10px/1 system-ui, sans-serif;
+  letter-spacing: .10em;
+  text-transform: uppercase;
+  box-shadow: 0 8px 28px rgba(0,0,0,.35), 0 0 26px rgba(241,213,143,.12);
+  animation: bonusBanner 1.6s ease both;
+}
+@keyframes bonusBanner {
+  0% { opacity: 0; transform: translate(-50%, 12px) scale(.88); }
+  18% { opacity: 1; transform: translate(-50%, 0) scale(1.03); }
+  72% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -12px) scale(.96); }
+}
+
+@media (max-width: 780px) and (orientation: portrait) {
+  .difficulty-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+  }
+  .difficulty-btn {
+    min-height: 44px;
+    padding: 6px 2px;
+  }
+  .difficulty-btn strong { font-size: 12px; }
+  .difficulty-btn span { font-size: 7px; }
+  .bonus-modal {
+    width: min(94vw, 480px);
+    padding: 18px 14px;
+  }
+  .bonus-coin {
+    width: 86px;
+    height: 86px;
+  }
+}
+
 </style>
 
   <link rel="manifest" href="./manifest.webmanifest" />
@@ -1360,6 +1627,12 @@ button, .cell {
             <button class="seg-btn" data-mode="ai" type="button">Gegen KI</button>
           </div>
 
+
+          <div id="difficultySection" class="ai-difficulty hidden">
+            <h2>KI-Schwierigkeit</h2>
+            <div id="difficultyGrid" class="difficulty-grid" role="group" aria-label="KI-Schwierigkeitsgrad"></div>
+          </div>
+
           <h2>Spielfeld</h2>
           <div id="sizeGrid" class="size-grid" role="group" aria-label="Spielfeldgröße"></div>
 
@@ -1384,6 +1657,7 @@ button, .cell {
           <div class="rule-strip">
             <span>4 IN EINER REIHE</span><strong>= 2 PUNKTE</strong>
           </div>
+          <p class="small" style="margin-top:12px">Ab Runde 5 kann zufällig eine Bonus-Runde erscheinen. Münze bestimmt den Spieler, danach wird eine von 12 Bonuskarten gezogen.</p>
         </aside>
       </div>
     </section>
@@ -1443,6 +1717,20 @@ button, .cell {
     </section>
   </main>
 
+
+  <dialog id="bonusDialog" class="modal bonus-modal chrome-panel">
+    <p class="eyebrow">BONUS-RUNDE</p>
+    <h2 class="bonus-title">Lucky Break</h2>
+    <div class="bonus-stage">
+      <div id="bonusCoin" class="bonus-coin" aria-label="Münzwurf">?</div>
+      <div id="bonusPlayer" class="bonus-player-pill">Münze entscheidet …</div>
+      <p id="bonusText" class="bonus-subtitle">Wer bekommt die Bonuskarte?</p>
+      <button id="bonusCard" class="bonus-card" type="button" disabled>
+        <span class="card-back"><b>?</b><span>KARTE ZIEHEN</span></span>
+      </button>
+    </div>
+  </dialog>
+
   <dialog id="resultDialog" class="modal chrome-panel">
     <button class="modal-close" data-close="resultDialog" type="button" aria-label="Schließen">×</button>
     <p class="eyebrow">PARTIE BEENDET</p>
@@ -1479,6 +1767,30 @@ button, .cell {
     { id: '7x3', cols: 7, rows: 3 }
   ];
   const TIMER_OPTIONS = [0, 10, 20, 30];
+  const AI_LEVELS = [
+    { id: 1, name: 'Anfänger', short: 'Zufall' },
+    { id: 2, name: 'Leicht', short: 'Basis' },
+    { id: 3, name: 'Mittel', short: 'Taktik' },
+    { id: 4, name: 'Schwer', short: 'Voraus' },
+    { id: 5, name: 'Meister', short: 'Analyse' }
+  ];
+  const BONUS_START_MOVE = 5;
+  const BONUS_CHANCE = 0.33;
+  const BONUS_COOLDOWN_MOVES = 2;
+  const BONUS_CARDS = [
+    { id:'delete1', title:'Lösche 1', icon:'−1', type:'delete', amount:1, text:'Entferne ein beliebiges belegtes Feld.' },
+    { id:'delete2', title:'Lösche 2', icon:'−2', type:'delete', amount:2, text:'Entferne bis zu zwei beliebige belegte Felder.' },
+    { id:'delete3', title:'Lösche 3', icon:'−3', type:'delete', amount:3, text:'Entferne bis zu drei beliebige belegte Felder.' },
+    { id:'set1', title:'Setze 1', icon:'+1', type:'set', amount:1, text:'Setze ein zusätzliches eigenes Symbol.' },
+    { id:'set2', title:'Setze 2', icon:'+2', type:'set', amount:2, text:'Setze bis zu zwei zusätzliche eigene Symbole.' },
+    { id:'set3', title:'Setze 3', icon:'+3', type:'set', amount:3, text:'Setze bis zu drei zusätzliche eigene Symbole.' },
+    { id:'blank', title:'Niete', icon:'×', type:'blank', amount:0, text:'Keine Veränderung. Das Spiel geht normal weiter.' },
+    { id:'capture', title:'Übernahme', icon:'↯', type:'capture', amount:1, text:'Übernimm ein gegnerisches Feld und mache es zu deinem.' },
+    { id:'relocate', title:'Versetzen', icon:'↔', type:'relocate', amount:1, text:'Versetze eines deiner Symbole auf ein freies Feld.' },
+    { id:'point', title:'+1 Punkt', icon:'★', type:'point', amount:1, text:'Du erhältst sofort einen zusätzlichen Punkt.' },
+    { id:'stealpoint', title:'Punktedieb', icon:'◆', type:'stealpoint', amount:1, text:'Stehle dem Gegner einen Punkt, falls er mindestens einen hat.' },
+    { id:'double', title:'Doppel-Triplet', icon:'×2', type:'double', amount:1, text:'Dein nächstes neu gebildetes Triplet bringt einen zusätzlichen Punkt.' }
+  ];
   const STORAGE = {
     settings: 'ttt2.settings.v1',
     stats: 'ttt2.stats.v1'
@@ -1491,6 +1803,7 @@ button, .cell {
   const defaultStats = () => ({
     games: 0, winsX: 0, winsO: 0, draws: 0,
     aiWins: 0, aiLosses: 0, triplets: 0, maxTriplets: 0,
+    bonusRounds: 0, bonusCards: {},
     sizes: {}, achievements: {}
   });
 
@@ -1508,10 +1821,11 @@ button, .cell {
     'menuView','gameView','homeBtn','soundBtn','statsBtn','sizeGrid','timerGrid','startBtn','board','boardWrap','boardFlash',
     'scoreX','scoreO','scoreXCard','scoreOCard','playerOLabel','boardMeta','modeMeta','gameStatus','turnTimer','timerValue','timerRing',
     'matchTriplets','tripletFeed','restartBtn','menuBtn','resultDialog','resultTitle','resultText','resultX','resultO','playAgainBtn','resultMenuBtn',
-    'statsDialog','statsContent','toast'
+    'statsDialog','statsContent','toast','difficultySection','difficultyGrid','bonusDialog','bonusCoin','bonusPlayer','bonusText','bonusCard'
   ].map(id => [id, document.getElementById(id)]));
 
-  let settings = load(STORAGE.settings, { mode: 'pvp', size: 'random', timer: 0, sound: true });
+  let settings = load(STORAGE.settings, { mode: 'pvp', size: 'random', timer: 0, sound: true, difficulty: 3 });
+  if (!AI_LEVELS.some(l => l.id === Number(settings.difficulty))) settings.difficulty = 3;
   let stats = Object.assign(defaultStats(), load(STORAGE.stats, {}));
   let game = null;
   let appState = states.MENU;
@@ -1519,6 +1833,7 @@ button, .cell {
   let timerId = null;
   let aiJob = null;
   let toastJob = null;
+  let bonusFlow = null;
 
   init();
 
@@ -1561,11 +1876,32 @@ button, .cell {
       if (settings.sound) sound('select');
     });
     els.statsBtn.addEventListener('click', openStats);
+    els.bonusCard.addEventListener('click', () => {
+      if (bonusFlow && bonusFlow.stage === 'draw-ready') drawBonusCard();
+    });
+    els.bonusDialog.addEventListener('cancel', e => e.preventDefault());
     document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', () => document.getElementById(b.dataset.close).close()));
   }
 
   function renderMenuControls() {
     document.querySelectorAll('.seg-btn[data-mode]').forEach(btn => btn.classList.toggle('active', btn.dataset.mode === settings.mode));
+    els.difficultySection.classList.toggle('hidden', settings.mode !== 'ai');
+    els.difficultyGrid.innerHTML = '';
+    AI_LEVELS.forEach(level => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'difficulty-btn';
+      b.classList.toggle('active', Number(settings.difficulty) === level.id);
+      b.innerHTML = `<strong>${level.id}</strong><span>${level.name}</span>`;
+      b.title = `Stufe ${level.id}: ${level.name}`;
+      b.addEventListener('click', () => {
+        settings.difficulty = level.id;
+        persistSettings();
+        renderMenuControls();
+        sound('select');
+      });
+      els.difficultyGrid.appendChild(b);
+    });
     els.sizeGrid.innerHTML = '';
     [...BOARD_SIZES, { id: 'random', label: 'Zufällig' }].forEach(s => {
       const b = document.createElement('button');
@@ -1596,12 +1932,16 @@ button, .cell {
     game = {
       cols: chosen.cols, rows: chosen.rows, sizeId: chosen.id,
       board: Array(chosen.cols * chosen.rows).fill(null), current: starter, starter, scores: {X:0,O:0},
-      scored: new Set(), totalTriplets: 0, move: 0, ended: false, turnStartedAt: Date.now()
+      scored: new Set(), totalTriplets: 0, move: 0, ended: false, turnStartedAt: Date.now(),
+      bonusCooldown: 0, bonusCount: 0, doubleTriplet: { X:false, O:false }
     };
+    bonusFlow = null;
 
     els.resultDialog.close?.();
     els.boardMeta.textContent = `${game.cols}×${game.rows}`;
-    els.modeMeta.textContent = settings.mode === 'ai' ? 'Gegen KI' : '2 Spieler';
+    els.modeMeta.textContent = settings.mode === 'ai'
+      ? `KI · Stufe ${Number(settings.difficulty)}`
+      : '2 Spieler';
     els.playerOLabel.textContent = settings.mode === 'ai' ? 'COMPUTER' : 'SPIELER O';
     els.matchTriplets.textContent = '0';
     els.tripletFeed.innerHTML = '<p class="feed-empty">Noch kein Triplet.</p>';
@@ -1652,7 +1992,12 @@ button, .cell {
   window.addEventListener('orientationchange', () => setTimeout(updateMarkSize, 120), { passive: true });
 
   function humanMove(index) {
-    if (!game || game.ended || appState === states.EVALUATING) return;
+    if (!game || game.ended) return;
+    if (bonusFlow && bonusFlow.stage === 'targeting') {
+      handleBonusTarget(index);
+      return;
+    }
+    if (appState === states.EVALUATING || appState === 'BONUS') return;
     if (settings.mode === 'ai' && game.current === 'O') return;
     if (game.board[index]) return;
     placeMove(index, game.current);
@@ -1673,27 +2018,50 @@ button, .cell {
 
   function evaluateMove(index, player) {
     const fresh = newTripletsForMove(game.board, game.cols, game.rows, index, player, game.scored);
-    if (fresh.length) {
-      fresh.forEach(t => game.scored.add(t.key));
-      game.scores[player] += fresh.length;
-      game.totalTriplets += fresh.length;
-      stats.triplets += fresh.length;
-      unlock('first_triplet');
-      if (fresh.length >= 2) unlock('multi_triplet');
-      if (game.totalTriplets >= 3) unlock('three_match');
-      animateTriplets(fresh, player);
-      addFeed(player, fresh.length);
-      sound(fresh.length > 1 ? 'multi' : 'triplet', player);
-    }
+    if (fresh.length) awardTriplets(fresh, player, 'normal');
     updateHUD();
 
-    if (game.move >= game.board.length) {
-      setTimeout(endGame, fresh.length ? 700 : 250);
-      return;
+    const next = player === 'X' ? 'O' : 'X';
+    const delay = fresh.length ? 720 : 180;
+
+    setTimeout(() => {
+      if (!game || game.ended) return;
+      if (maybeStartBonusRound(next)) return;
+      if (!hasFreeCell()) {
+        endGame();
+        return;
+      }
+      beginTurn(next);
+    }, delay);
+  }
+
+  function awardTriplets(fresh, player, source='normal') {
+    if (!fresh.length) return 0;
+    fresh.forEach(t => game.scored.add(t.key));
+
+    let points = fresh.length;
+    if (game.doubleTriplet[player]) {
+      points += 1;
+      game.doubleTriplet[player] = false;
+      showToast(`Doppel-Triplet: Spieler ${player} erhält +1 Extrapunkt`);
     }
 
-    const next = player === 'X' ? 'O' : 'X';
-    setTimeout(() => beginTurn(next), fresh.length ? 650 : 180);
+    game.scores[player] += points;
+    game.totalTriplets += fresh.length;
+    stats.triplets += fresh.length;
+    unlock('first_triplet');
+    if (fresh.length >= 2) unlock('multi_triplet');
+    if (game.totalTriplets >= 3) unlock('three_match');
+
+    animateTriplets(fresh, player);
+    addFeed(player, fresh.length, points, source);
+    sound(fresh.length > 1 ? 'multi' : 'triplet', player);
+    return points;
+  }
+
+  function findAllFreshTriplets(player) {
+    return allTripletWindows(game.cols, game.rows)
+      .filter(w => w.cells.every(i => game.board[i] === player) && !game.scored.has(w.key));
   }
 
   function newTripletsForMove(board, cols, rows, index, player, alreadyScored) {
@@ -1845,96 +2213,670 @@ button, .cell {
     setTimeout(() => label.remove(), 1450);
   }
 
-  function addFeed(player, count) {
+  function addFeed(player, count, points=count, source='normal') {
     const empty = els.tripletFeed.querySelector('.feed-empty'); if (empty) empty.remove();
     const p = document.createElement('p'); p.className='feed-item';
-    p.innerHTML = `<b>${player}</b> erzielt ${count === 1 ? '1 neues Triplet' : `${count} neue Triplets`} · Zug ${game.move}`;
+    const origin = source === 'bonus' ? ' · Bonus' : '';
+    const pointText = points !== count ? ` · ${points} Punkte` : '';
+    p.innerHTML = `<b>${player}</b> erzielt ${count === 1 ? '1 neues Triplet' : `${count} neue Triplets`}${pointText}${origin} · Runde ${game.move}`;
     els.tripletFeed.prepend(p);
     while (els.tripletFeed.children.length > 8) els.tripletFeed.lastChild.remove();
   }
 
   function beginTurn(player) {
     if (!game || game.ended) return;
+    if (!hasFreeCell()) { endGame(); return; }
     game.current = player; game.turnStartedAt = Date.now();
     appState = player === 'X' ? states.X : states.O;
+    els.board.classList.remove('bonus-select');
+    syncBoardUI();
     els.board.classList.toggle('ai-thinking', settings.mode === 'ai' && player === 'O');
     updateHUD();
     startTimer();
     if (settings.mode === 'ai' && player === 'O') {
-      els.gameStatus.textContent = 'Computer analysiert…';
+      els.gameStatus.textContent = `Computer analysiert · Stufe ${Number(settings.difficulty)}…`;
       aiJob = setTimeout(() => {
-        if (!game || game.ended || game.current !== 'O') return;
-        const move = chooseAIMove();
+        if (!game || game.ended || game.current !== 'O' || bonusFlow) return;
+        const move = chooseAIMove('O');
         els.board.classList.remove('ai-thinking');
         if (move !== null) placeMove(move, 'O');
-      }, 430 + Math.floor(Math.random()*280));
+      }, 390 + Math.floor(Math.random()*260));
     }
   }
 
-  function chooseAIMove() {
-    const free = game.board.map((v,i) => v ? null : i).filter(v => v !== null);
+  function chooseAIMove(player='O') {
+    const free = freeIndices(game.board);
     if (!free.length) return null;
-    if (game.cols === 3 && game.rows === 3) return minimaxMove3x3(free);
 
-    const windows = allTripletWindows(game.cols, game.rows);
-    let best = -Infinity, candidates = [];
-    for (const i of free) {
-      const score = heuristicMove(i, 'O', windows);
-      if (score > best) { best=score; candidates=[i]; }
-      else if (score === best) candidates.push(i);
+    const level = Math.max(1, Math.min(5, Number(settings.difficulty) || 3));
+    const opp = player === 'O' ? 'X' : 'O';
+
+    // Stufe 1: überwiegend zufällig.
+    if (level === 1) {
+      if (Math.random() < .80) return randomPick(free);
+      return pickFromTopMoves(free, player, 5);
     }
-    return candidates[Math.floor(Math.random()*candidates.length)];
+
+    // Sofortige eigene Triplets erkennen.
+    const scoring = free
+      .map(i => ({ i, n: freshTripletCountAfterMove(game.board, i, player) }))
+      .filter(x => x.n > 0)
+      .sort((a,b) => b.n-a.n);
+    if (scoring.length && (level >= 2 || Math.random() < .25)) {
+      const max = scoring[0].n;
+      return randomPick(scoring.filter(x => x.n === max).map(x => x.i));
+    }
+
+    // Ab Stufe 2 unmittelbare gegnerische Triplets häufiger blocken.
+    const threats = free
+      .map(i => ({ i, n: freshTripletCountAfterMove(game.board, i, opp) }))
+      .filter(x => x.n > 0)
+      .sort((a,b) => b.n-a.n);
+    if (threats.length && (level >= 3 || Math.random() < .72)) {
+      const max = threats[0].n;
+      return randomPick(threats.filter(x => x.n === max).map(x => x.i));
+    }
+
+    if (level === 2) {
+      if (Math.random() < .38) return randomPick(free);
+      return pickFromTopMoves(free, player, 4);
+    }
+
+    if (level === 3) {
+      return pickFromTopMoves(free, player, 2);
+    }
+
+    if (level === 4) {
+      return chooseLookaheadMove(player, 2, 8);
+    }
+
+    // Stufe 5: 3x3 vollständig; größere Boards mit tiefer, begrenzter Suche.
+    if (game.cols === 3 && game.rows === 3) {
+      return minimaxMove3x3(player);
+    }
+    return chooseLookaheadMove(player, 3, 7);
   }
 
-  function heuristicMove(i, player, windows) {
+  function randomPick(arr) {
+    return arr.length ? arr[Math.floor(Math.random() * arr.length)] : null;
+  }
+
+  function freeIndices(board) {
+    return board.map((v,i) => v ? null : i).filter(v => v !== null);
+  }
+
+  function hasFreeCell() {
+    return !!game && game.board.some(v => !v);
+  }
+
+  function freshTripletCountAfterMove(board, index, player) {
+    if (board[index]) return -1;
+    const b = board.slice();
+    b[index] = player;
+    return allTripletWindows(game.cols, game.rows)
+      .filter(w => w.cells.includes(index) && w.cells.every(k => b[k] === player) && !game.scored.has(w.key))
+      .length;
+  }
+
+  function heuristicMoveFor(i, player, board=game.board) {
+    if (board[i]) return -Infinity;
     const opp = player === 'O' ? 'X' : 'O';
+    const windows = allTripletWindows(game.cols, game.rows);
     let s = 0;
+
     for (const w of windows) {
       if (!w.cells.includes(i)) continue;
-      const vals = w.cells.map(k => k === i ? player : game.board[k]);
-      const own = vals.filter(v => v===player).length, other = vals.filter(v => v===opp).length, empty = vals.filter(v => !v).length;
-      if (own===3) s += 1000;
-      else if (other===0) s += own*own*18 + empty;
 
-      const blockVals = w.cells.map(k => k === i ? opp : game.board[k]);
-      const oppCount = blockVals.filter(v => v===opp).length;
-      const ownInBlock = blockVals.filter(v => v===player).length;
-      if (oppCount===3) s += 720;
-      else if (ownInBlock===0) s += oppCount*oppCount*9;
+      const ownVals = w.cells.map(k => k === i ? player : board[k]);
+      const own = ownVals.filter(v => v === player).length;
+      const other = ownVals.filter(v => v === opp).length;
+      if (own === 3 && !game.scored.has(w.key)) s += 1450;
+      else if (other === 0) s += own === 2 ? 115 : own === 1 ? 22 : 4;
+
+      const blockVals = w.cells.map(k => k === i ? opp : board[k]);
+      const oppCount = blockVals.filter(v => v === opp).length;
+      const ownInBlock = blockVals.filter(v => v === player).length;
+      if (oppCount === 3 && !game.scored.has(w.key)) s += 980;
+      else if (ownInBlock === 0) s += oppCount === 2 ? 82 : oppCount === 1 ? 14 : 2;
     }
-    const r=Math.floor(i/game.cols), c=i%game.cols;
-    const cr=(game.rows-1)/2, cc=(game.cols-1)/2;
-    s += Math.max(0, 12 - (Math.abs(r-cr)+Math.abs(c-cc))*3);
-    s += Math.random()*1.5;
+
+    const r = Math.floor(i / game.cols), c = i % game.cols;
+    const cr = (game.rows - 1) / 2, cc = (game.cols - 1) / 2;
+    s += Math.max(0, 15 - (Math.abs(r-cr) + Math.abs(c-cc)) * 3.2);
     return s;
   }
 
-  function minimaxMove3x3(free) {
-    // Maximiert den finalen Triplet-Punktestand auf dem 3x3-Board.
-    let best=-Infinity, picks=[];
-    for (const i of free) {
-      const b=game.board.slice(); b[i]='O';
-      const v=minimaxScore(b, false, -Infinity, Infinity);
-      if(v>best){best=v;picks=[i];} else if(v===best)picks.push(i);
-    }
-    return picks[Math.floor(Math.random()*picks.length)];
+  function pickFromTopMoves(free, player, topN=2) {
+    const ranked = free
+      .map(i => ({ i, s: heuristicMoveFor(i, player) }))
+      .sort((a,b) => b.s - a.s);
+    const top = ranked.slice(0, Math.min(topN, ranked.length));
+    return randomPick(top.map(x => x.i));
   }
 
-  function minimaxScore(board, maximizing, alpha, beta) {
-    const free=board.map((v,i)=>v?null:i).filter(v=>v!==null);
-    if(!free.length) return countTriplets(board,'O',3,3)-countTriplets(board,'X',3,3);
-    if(maximizing){
-      let best=-Infinity;
-      for(const i of free){ const b=board.slice(); b[i]='O'; best=Math.max(best,minimaxScore(b,false,alpha,beta)); alpha=Math.max(alpha,best); if(beta<=alpha)break; }
+  function chooseLookaheadMove(player, depth, branchLimit) {
+    const free = freeIndices(game.board);
+    const ranked = free
+      .map(i => ({ i, s: heuristicMoveFor(i, player) }))
+      .sort((a,b) => b.s - a.s)
+      .slice(0, Math.min(branchLimit, free.length));
+
+    let best = -Infinity;
+    let picks = [];
+    for (const {i} of ranked) {
+      const b = game.board.slice();
+      b[i] = player;
+      const value = searchBoard(b, player === 'X' ? 'O' : 'X', player, depth - 1, branchLimit, -Infinity, Infinity);
+      if (value > best + .0001) { best = value; picks = [i]; }
+      else if (Math.abs(value - best) <= .0001) picks.push(i);
+    }
+    return randomPick(picks.length ? picks : ranked.map(x => x.i));
+  }
+
+  function searchBoard(board, toMove, rootPlayer, depth, branchLimit, alpha, beta) {
+    const free = freeIndices(board);
+    if (depth <= 0 || !free.length) return evaluateBoard(board, rootPlayer);
+
+    const maximizing = toMove === rootPlayer;
+    const ranked = free
+      .map(i => ({ i, s: heuristicMoveForSim(i, toMove, board) }))
+      .sort((a,b) => b.s - a.s)
+      .slice(0, Math.min(branchLimit, free.length));
+
+    if (maximizing) {
+      let best = -Infinity;
+      for (const {i} of ranked) {
+        const b = board.slice(); b[i] = toMove;
+        best = Math.max(best, searchBoard(b, toMove === 'X' ? 'O' : 'X', rootPlayer, depth - 1, branchLimit, alpha, beta));
+        alpha = Math.max(alpha, best);
+        if (beta <= alpha) break;
+      }
       return best;
     }
-    let best=Infinity;
-    for(const i of free){ const b=board.slice(); b[i]='X'; best=Math.min(best,minimaxScore(b,true,alpha,beta)); beta=Math.min(beta,best); if(beta<=alpha)break; }
+
+    let best = Infinity;
+    for (const {i} of ranked) {
+      const b = board.slice(); b[i] = toMove;
+      best = Math.min(best, searchBoard(b, toMove === 'X' ? 'O' : 'X', rootPlayer, depth - 1, branchLimit, alpha, beta));
+      beta = Math.min(beta, best);
+      if (beta <= alpha) break;
+    }
+    return best;
+  }
+
+  function heuristicMoveForSim(i, player, board) {
+    if (board[i]) return -Infinity;
+    const opp = player === 'O' ? 'X' : 'O';
+    let s = 0;
+    for (const w of allTripletWindows(game.cols, game.rows)) {
+      if (!w.cells.includes(i)) continue;
+      const vals = w.cells.map(k => k === i ? player : board[k]);
+      const own = vals.filter(v => v === player).length;
+      const other = vals.filter(v => v === opp).length;
+      if (own === 3) s += 600;
+      else if (!other) s += own * own * 15;
+
+      const block = w.cells.map(k => k === i ? opp : board[k]);
+      const oc = block.filter(v => v === opp).length;
+      const pc = block.filter(v => v === player).length;
+      if (oc === 3) s += 430;
+      else if (!pc) s += oc * oc * 8;
+    }
+    return s;
+  }
+
+  function evaluateBoard(board, rootPlayer) {
+    const opp = rootPlayer === 'O' ? 'X' : 'O';
+    let score = (countTriplets(board, rootPlayer, game.cols, game.rows) - countTriplets(board, opp, game.cols, game.rows)) * 420;
+    for (const w of allTripletWindows(game.cols, game.rows)) {
+      const vals = w.cells.map(i => board[i]);
+      const own = vals.filter(v => v === rootPlayer).length;
+      const other = vals.filter(v => v === opp).length;
+      if (!other) score += own * own * 9;
+      if (!own) score -= other * other * 9;
+    }
+    return score;
+  }
+
+  function minimaxMove3x3(player='O') {
+    const free = freeIndices(game.board);
+    let best = -Infinity, picks = [];
+    for (const i of free) {
+      const b = game.board.slice(); b[i] = player;
+      const v = minimaxScore3x3(b, player === 'X' ? 'O' : 'X', player, -Infinity, Infinity);
+      if (v > best) { best = v; picks = [i]; }
+      else if (v === best) picks.push(i);
+    }
+    return randomPick(picks);
+  }
+
+  function minimaxScore3x3(board, toMove, rootPlayer, alpha, beta) {
+    const free = freeIndices(board);
+    if (!free.length) {
+      const opp = rootPlayer === 'O' ? 'X' : 'O';
+      return countTriplets(board, rootPlayer, 3, 3) - countTriplets(board, opp, 3, 3);
+    }
+    const maximizing = toMove === rootPlayer;
+    if (maximizing) {
+      let best = -Infinity;
+      for (const i of free) {
+        const b = board.slice(); b[i] = toMove;
+        best = Math.max(best, minimaxScore3x3(b, toMove === 'X' ? 'O' : 'X', rootPlayer, alpha, beta));
+        alpha = Math.max(alpha, best);
+        if (beta <= alpha) break;
+      }
+      return best;
+    }
+    let best = Infinity;
+    for (const i of free) {
+      const b = board.slice(); b[i] = toMove;
+      best = Math.min(best, minimaxScore3x3(b, toMove === 'X' ? 'O' : 'X', rootPlayer, alpha, beta));
+      beta = Math.min(beta, best);
+      if (beta <= alpha) break;
+    }
     return best;
   }
 
   function countTriplets(board, player, cols, rows) {
-    return allTripletWindows(cols,rows).filter(w=>w.cells.every(i=>board[i]===player)).length;
+    return allTripletWindows(cols,rows).filter(w => w.cells.every(i => board[i] === player)).length;
+  }
+
+
+  function maybeStartBonusRound(nextPlayer) {
+    if (!game || game.ended || bonusFlow) return false;
+
+    if (game.bonusCooldown > 0) {
+      game.bonusCooldown--;
+      return false;
+    }
+
+    if (game.move < BONUS_START_MOVE || Math.random() >= BONUS_CHANCE) return false;
+
+    startBonusRound(nextPlayer);
+    return true;
+  }
+
+  function startBonusRound(nextPlayer) {
+    stopTimer();
+    if (aiJob) { clearTimeout(aiJob); aiJob = null; }
+    appState = 'BONUS';
+    game.bonusCooldown = BONUS_COOLDOWN_MOVES;
+    bonusFlow = {
+      stage: 'coin',
+      player: null,
+      card: null,
+      nextPlayer,
+      remaining: 0,
+      selected: []
+    };
+
+    syncBoardUI();
+    els.board.classList.remove('ai-thinking', 'bonus-select');
+    els.gameStatus.textContent = 'Bonus-Runde';
+    els.bonusCoin.className = 'bonus-coin flipping';
+    els.bonusCoin.textContent = '?';
+    els.bonusPlayer.className = 'bonus-player-pill';
+    els.bonusPlayer.textContent = 'Münze entscheidet …';
+    els.bonusText.textContent = 'Wer bekommt die Bonuskarte?';
+    els.bonusCard.disabled = true;
+    els.bonusCard.className = 'bonus-card';
+    els.bonusCard.innerHTML = '<span class="card-back"><b>?</b><span>KARTE ZIEHEN</span></span>';
+    if (!els.bonusDialog.open) els.bonusDialog.showModal();
+    sound('coin');
+
+    const selectedPlayer = Math.random() < .5 ? 'X' : 'O';
+    bonusFlow.player = selectedPlayer;
+
+    setTimeout(() => {
+      if (!bonusFlow || bonusFlow.stage !== 'coin') return;
+      els.bonusCoin.textContent = selectedPlayer;
+      els.bonusCoin.className = `bonus-coin ${selectedPlayer === 'X' ? 'player-x' : 'player-o'}`;
+      els.bonusPlayer.className = `bonus-player-pill ${selectedPlayer === 'X' ? 'player-x' : 'player-o'}`;
+      const isAI = settings.mode === 'ai' && selectedPlayer === 'O';
+      els.bonusPlayer.textContent = isAI ? 'Computer O wurde gewählt' : `Spieler ${selectedPlayer} wurde gewählt`;
+      els.bonusText.textContent = isAI ? 'Der Computer zieht automatisch eine Karte.' : `Spieler ${selectedPlayer}: Ziehe eine Karte.`;
+      bonusFlow.stage = 'draw-ready';
+      els.bonusCard.disabled = isAI;
+      if (isAI) setTimeout(drawBonusCard, 720);
+    }, 1050);
+  }
+
+  function drawBonusCard() {
+    if (!bonusFlow || bonusFlow.stage !== 'draw-ready') return;
+    bonusFlow.stage = 'revealing';
+    const card = BONUS_CARDS[Math.floor(Math.random() * BONUS_CARDS.length)];
+    bonusFlow.card = card;
+
+    stats.bonusRounds = (stats.bonusRounds || 0) + 1;
+    stats.bonusCards ||= {};
+    stats.bonusCards[card.id] = (stats.bonusCards[card.id] || 0) + 1;
+    save(STORAGE.stats, stats);
+
+    els.bonusCard.disabled = true;
+    els.bonusCard.className = 'bonus-card revealed';
+    sound('card');
+
+    setTimeout(() => {
+      if (!bonusFlow) return;
+      els.bonusCard.innerHTML = `
+        <span class="card-face">
+          <span class="card-icon">${card.icon}</span>
+          <strong>${card.title}</strong>
+          <span>${card.text}</span>
+        </span>`;
+      els.bonusText.textContent = `${playerName(bonusFlow.player)}: ${card.title}`;
+    }, 300);
+
+    setTimeout(() => resolveBonusCard(card), 1080);
+  }
+
+  function resolveBonusCard(card) {
+    if (!bonusFlow || bonusFlow.card !== card) return;
+
+    if (card.type === 'blank') {
+      showBonusBanner('Niete · keine Änderung');
+      sound('bonus');
+      setTimeout(finishBonusRound, 850);
+      return;
+    }
+
+    if (card.type === 'point') {
+      game.scores[bonusFlow.player] += 1;
+      updateHUD();
+      showBonusBanner(`${playerName(bonusFlow.player)} +1 Punkt`);
+      sound('bonus');
+      setTimeout(finishBonusRound, 950);
+      return;
+    }
+
+    if (card.type === 'stealpoint') {
+      const p = bonusFlow.player;
+      const opp = p === 'X' ? 'O' : 'X';
+      if (game.scores[opp] > 0) {
+        game.scores[opp]--;
+        game.scores[p]++;
+        showBonusBanner(`${playerName(p)} stiehlt 1 Punkt`);
+      } else {
+        showBonusBanner('Punktedieb · Gegner hat 0 Punkte');
+      }
+      updateHUD();
+      sound('bonus');
+      setTimeout(finishBonusRound, 1050);
+      return;
+    }
+
+    if (card.type === 'double') {
+      game.doubleTriplet[bonusFlow.player] = true;
+      showBonusBanner(`${playerName(bonusFlow.player)} · nächstes Triplet +1`);
+      sound('bonus');
+      setTimeout(finishBonusRound, 1050);
+      return;
+    }
+
+    beginBonusTargeting(card);
+  }
+
+  function beginBonusTargeting(card) {
+    if (!bonusFlow) return;
+    bonusFlow.stage = 'targeting';
+    bonusFlow.remaining = card.amount || 1;
+    bonusFlow.selected = [];
+    els.bonusDialog.close();
+    els.board.classList.add('bonus-select');
+    appState = 'BONUS';
+
+    const p = bonusFlow.player;
+    if (card.type === 'relocate') {
+      bonusFlow.relocatePhase = 'source';
+      setBonusPrompt(`${playerName(p)}: Eigenes Feld zum Versetzen wählen`);
+    } else {
+      setBonusPrompt(bonusInstruction(card, p));
+    }
+
+    refreshBonusTargets();
+
+    if (settings.mode === 'ai' && p === 'O') {
+      setTimeout(runAIBonusTarget, 480);
+    }
+  }
+
+  function bonusInstruction(card, player) {
+    if (card.type === 'delete') return `${playerName(player)}: ${card.amount} Feld${card.amount === 1 ? '' : 'er'} löschen`;
+    if (card.type === 'set') return `${playerName(player)}: ${card.amount} Feld${card.amount === 1 ? '' : 'er'} zusätzlich setzen`;
+    if (card.type === 'capture') return `${playerName(player)}: Ein gegnerisches Feld übernehmen`;
+    return `${playerName(player)}: Bonus ausführen`;
+  }
+
+  function setBonusPrompt(text) {
+    els.gameStatus.textContent = text;
+  }
+
+  function eligibleBonusTargets() {
+    if (!bonusFlow || bonusFlow.stage !== 'targeting') return [];
+    const card = bonusFlow.card;
+    const p = bonusFlow.player;
+    const opp = p === 'X' ? 'O' : 'X';
+
+    if (card.type === 'delete') {
+      return game.board.map((v,i) => v ? i : null).filter(i => i !== null && !bonusFlow.selected.includes(i));
+    }
+    if (card.type === 'set') {
+      return game.board.map((v,i) => !v ? i : null).filter(i => i !== null && !bonusFlow.selected.includes(i));
+    }
+    if (card.type === 'capture') {
+      return game.board.map((v,i) => v === opp ? i : null).filter(i => i !== null);
+    }
+    if (card.type === 'relocate') {
+      if (bonusFlow.relocatePhase === 'source') {
+        return game.board.map((v,i) => v === p ? i : null).filter(i => i !== null);
+      }
+      return game.board.map((v,i) => !v ? i : null).filter(i => i !== null);
+    }
+    return [];
+  }
+
+  function refreshBonusTargets() {
+    const eligible = new Set(eligibleBonusTargets());
+    [...els.board.children].forEach((cell, i) => {
+      cell.classList.remove('bonus-target', 'player-x', 'player-o');
+      const ok = eligible.has(i);
+      cell.disabled = !ok;
+      if (ok) {
+        cell.classList.add('bonus-target', bonusFlow.player === 'X' ? 'player-x' : 'player-o');
+      }
+    });
+
+    if (!eligible.size) {
+      showBonusBanner('Keine gültigen Felder · Karte verfällt');
+      setTimeout(finishBonusRound, 900);
+    }
+  }
+
+  function handleBonusTarget(index) {
+    if (!bonusFlow || bonusFlow.stage !== 'targeting') return;
+    const eligible = eligibleBonusTargets();
+    if (!eligible.includes(index)) return;
+
+    const card = bonusFlow.card;
+    const p = bonusFlow.player;
+
+    if (card.type === 'relocate') {
+      if (bonusFlow.relocatePhase === 'source') {
+        bonusFlow.relocateSource = index;
+        bonusFlow.relocatePhase = 'destination';
+        setBonusPrompt(`${playerName(p)}: Neues freies Feld wählen`);
+        refreshBonusTargets();
+        if (settings.mode === 'ai' && p === 'O') setTimeout(runAIBonusTarget, 360);
+        return;
+      }
+      bonusFlow.stage = 'resolving';
+      const src = bonusFlow.relocateSource;
+      game.board[src] = null;
+      game.board[index] = p;
+      syncBoardUI();
+      popCell(index);
+      awardBonusTriplets(p);
+      showBonusBanner(`${playerName(p)} versetzt ein Feld`);
+      sound('bonus');
+      setTimeout(finishBonusRound, 900);
+      return;
+    }
+
+    if (card.type === 'delete') {
+      game.board[index] = null;
+      bonusFlow.selected.push(index);
+      bonusFlow.remaining--;
+      syncBoardUI();
+      popCell(index);
+      if (bonusFlow.remaining <= 0 || !eligibleBonusTargets().length) {
+        bonusFlow.stage = 'resolving';
+        showBonusBanner(`${bonusFlow.selected.length} Feld${bonusFlow.selected.length === 1 ? '' : 'er'} gelöscht`);
+        sound('bonus');
+        setTimeout(finishBonusRound, 900);
+      } else {
+        setBonusPrompt(`${playerName(p)}: Noch ${bonusFlow.remaining} Feld${bonusFlow.remaining === 1 ? '' : 'er'} löschen`);
+        refreshBonusTargets();
+        if (settings.mode === 'ai' && p === 'O') setTimeout(runAIBonusTarget, 330);
+      }
+      return;
+    }
+
+    if (card.type === 'set') {
+      game.board[index] = p;
+      bonusFlow.selected.push(index);
+      bonusFlow.remaining--;
+      syncBoardUI();
+      popCell(index);
+      if (bonusFlow.remaining <= 0 || !eligibleBonusTargets().length) {
+        bonusFlow.stage = 'resolving';
+        awardBonusTriplets(p);
+        showBonusBanner(`${bonusFlow.selected.length} Bonus-Feld${bonusFlow.selected.length === 1 ? '' : 'er'} gesetzt`);
+        sound('bonus');
+        setTimeout(finishBonusRound, 1050);
+      } else {
+        setBonusPrompt(`${playerName(p)}: Noch ${bonusFlow.remaining} Feld${bonusFlow.remaining === 1 ? '' : 'er'} setzen`);
+        refreshBonusTargets();
+        if (settings.mode === 'ai' && p === 'O') setTimeout(runAIBonusTarget, 330);
+      }
+      return;
+    }
+
+    if (card.type === 'capture') {
+      bonusFlow.stage = 'resolving';
+      game.board[index] = p;
+      syncBoardUI();
+      popCell(index);
+      awardBonusTriplets(p);
+      showBonusBanner(`${playerName(p)} übernimmt ein Feld`);
+      sound('bonus');
+      setTimeout(finishBonusRound, 1000);
+    }
+  }
+
+  function runAIBonusTarget() {
+    if (!bonusFlow || bonusFlow.stage !== 'targeting' || bonusFlow.player !== 'O') return;
+    const eligible = eligibleBonusTargets();
+    if (!eligible.length) return;
+
+    let pick;
+    const card = bonusFlow.card;
+    const level = Number(settings.difficulty) || 3;
+
+    if (level <= 2) {
+      pick = randomPick(eligible);
+    } else if (card.type === 'set' || (card.type === 'relocate' && bonusFlow.relocatePhase === 'destination')) {
+      pick = eligible
+        .map(i => ({i, s: heuristicMoveFor(i, 'O')}))
+        .sort((a,b) => b.s-a.s)[0]?.i;
+    } else if (card.type === 'capture' || card.type === 'delete') {
+      const opp = 'X';
+      pick = eligible
+        .map(i => {
+          const involvement = allTripletWindows(game.cols, game.rows)
+            .filter(w => w.cells.includes(i))
+            .reduce((s,w) => s + w.cells.filter(k => game.board[k] === opp).length ** 2, 0);
+          return { i, s: involvement };
+        })
+        .sort((a,b) => b.s-a.s)[0]?.i;
+    } else if (card.type === 'relocate' && bonusFlow.relocatePhase === 'source') {
+      pick = eligible
+        .map(i => {
+          const involvement = allTripletWindows(game.cols, game.rows)
+            .filter(w => w.cells.includes(i))
+            .reduce((s,w) => s + w.cells.filter(k => game.board[k] === 'O').length, 0);
+          return { i, s: involvement };
+        })
+        .sort((a,b) => a.s-b.s)[0]?.i;
+    }
+
+    if (pick == null) pick = randomPick(eligible);
+    if (pick != null) handleBonusTarget(pick);
+  }
+
+  function awardBonusTriplets(player) {
+    const fresh = findAllFreshTriplets(player);
+    if (fresh.length) {
+      awardTriplets(fresh, player, 'bonus');
+      updateHUD();
+    }
+  }
+
+  function finishBonusRound() {
+    if (!bonusFlow || !game || game.ended) return;
+    const next = bonusFlow.nextPlayer;
+    game.bonusCount++;
+    bonusFlow = null;
+    if (els.bonusDialog.open) els.bonusDialog.close();
+    els.board.classList.remove('bonus-select');
+    syncBoardUI();
+    updateHUD();
+
+    if (!hasFreeCell()) {
+      setTimeout(endGame, 350);
+      return;
+    }
+    setTimeout(() => beginTurn(next), 300);
+  }
+
+  function syncBoardUI() {
+    if (!game) return;
+    [...els.board.children].forEach((cell, i) => {
+      const v = game.board[i];
+      cell.className = 'cell';
+      cell.innerHTML = '';
+      cell.disabled = !!v;
+      if (v) {
+        cell.classList.add(v.toLowerCase());
+        const span = document.createElement('span');
+        span.className = 'mark';
+        span.textContent = v;
+        cell.appendChild(span);
+      }
+    });
+    requestAnimationFrame(updateMarkSize);
+  }
+
+  function popCell(index) {
+    const cell = els.board.children[index];
+    if (!cell) return;
+    cell.classList.remove('bonus-pop');
+    void cell.offsetWidth;
+    cell.classList.add('bonus-pop');
+    setTimeout(() => cell.classList.remove('bonus-pop'), 700);
+  }
+
+  function showBonusBanner(text) {
+    const old = els.boardWrap.querySelector('.bonus-banner');
+    if (old) old.remove();
+    const banner = document.createElement('div');
+    banner.className = 'bonus-banner';
+    banner.textContent = text;
+    els.boardWrap.appendChild(banner);
+    setTimeout(() => banner.remove(), 1700);
+  }
+
+  function playerName(player) {
+    return settings.mode === 'ai' && player === 'O' ? 'Computer O' : `Spieler ${player}`;
   }
 
   function startTimer() {
@@ -1956,7 +2898,7 @@ button, .cell {
 
   function timeoutTurn() {
     stopTimer();
-    if(!game || game.ended || appState===states.EVALUATING) return;
+    if(!game || game.ended || appState===states.EVALUATING || appState==='BONUS' || bonusFlow) return;
     const timedOut=game.current;
     if(aiJob){ clearTimeout(aiJob); aiJob=null; }
     showToast(`${timedOut === 'O' && settings.mode==='ai' ? 'Computer' : `Spieler ${timedOut}`}: Zeit abgelaufen – Zug verfällt`);
@@ -1965,7 +2907,13 @@ button, .cell {
   }
 
   function stopTimer(){ if(timerId){clearTimeout(timerId);timerId=null;} }
-  function clearAsync(){ stopTimer(); if(aiJob){clearTimeout(aiJob);aiJob=null;} }
+  function clearAsync(){
+    stopTimer();
+    if(aiJob){clearTimeout(aiJob);aiJob=null;}
+    bonusFlow = null;
+    if (els.bonusDialog?.open) els.bonusDialog.close();
+    els.board?.classList.remove('bonus-select');
+  }
 
   function endGame() {
     if (!game || game.ended) return;
@@ -1997,7 +2945,11 @@ button, .cell {
     els.scoreX.textContent=game.scores.X; els.scoreO.textContent=game.scores.O; els.matchTriplets.textContent=game.totalTriplets;
     els.scoreXCard.classList.toggle('active',game.current==='X'&&!game.ended);
     els.scoreOCard.classList.toggle('active',game.current==='O'&&!game.ended);
-    if(!game.ended) els.gameStatus.textContent = game.current==='O' && settings.mode==='ai' ? 'Computer ist am Zug' : `Spieler ${game.current} ist am Zug`;
+    if(!game.ended && !bonusFlow) {
+      els.gameStatus.textContent = game.current==='O' && settings.mode==='ai'
+        ? `Computer ist am Zug · Stufe ${Number(settings.difficulty)}`
+        : `Spieler ${game.current} ist am Zug`;
+    }
   }
 
   function goMenu() {
@@ -2021,6 +2973,7 @@ button, .cell {
         <div class="stat-box"><small>KI Siege</small><strong>${stats.aiWins}</strong></div>
         <div class="stat-box"><small>Siege gg. KI</small><strong>${stats.aiLosses}</strong></div>
         <div class="stat-box"><small>Max. Triplets</small><strong>${stats.maxTriplets}</strong></div>
+        <div class="stat-box"><small>Bonus-Runden</small><strong>${stats.bonusRounds || 0}</strong></div>
       </div>
       <div class="achievement-grid">${list}</div>
       <div class="stats-footer"><button id="resetStatsBtn" class="danger-btn" type="button">Statistiken zurücksetzen</button></div>`;
@@ -2049,7 +3002,10 @@ button, .cell {
         place: player==='X'?[[190,.045,.02]]:[[260,.045,.02]],
         triplet:[[520,.05,.02],[660,.06,.09],[880,.11,.16]],
         multi:[[440,.04,.02],[660,.05,.07],[880,.05,.12],[1100,.12,.18]],
-        timeout:[[170,.08,.02],[120,.11,.11]], end:[[520,.06,.02],[390,.07,.11],[650,.12,.2]]
+        timeout:[[170,.08,.02],[120,.11,.11]], end:[[520,.06,.02],[390,.07,.11],[650,.12,.2]],
+        coin:[[280,.04,.02],[430,.04,.11],[620,.05,.20],[820,.07,.31]],
+        card:[[310,.04,.02],[540,.05,.08],[780,.08,.16]],
+        bonus:[[420,.04,.02],[650,.05,.08],[920,.09,.15]]
       }[type] || [];
       sequence.forEach(([freq,dur,delay])=>{
         const o=audioCtx.createOscillator(), g=audioCtx.createGain();
