@@ -16,7 +16,7 @@ Bei jeder Partie wird X oder O zufällig als Startspieler bestimmt.
 
 ### Bonus-Runden
 - Ab dem **5. normalen Zug** wird nach jedem regulären Zug geprüft, ob eine Bonus-Runde startet.
-- Wahrscheinlichkeit: **33 %**.
+- Wahrscheinlichkeit: **15 %**.
 - Nach einer Bonus-Runde folgen **mindestens zwei normale Züge ohne Bonus-Runde**.
 - Danach kann wieder zufällig eine Bonus-Runde erscheinen.
 - Eine Münze wählt zufällig Spieler X oder O.

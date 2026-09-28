@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tic-tac-toe-two-bonus-ai5-v4';
+const CACHE_NAME = 'tic-tac-toe-two-bonus-ai5-v5-lucky15';
 const APP_SHELL = [
   './',
   './index.html',
